@@ -17,7 +17,3 @@ class Camera:
 
     def release(self) -> None:
         self._capture.release()
-
-    def show(self, title, image) -> None:
-        cv2.imshow(title, image)
-        cv2.waitKey(10)

@@ -1,6 +1,6 @@
+import cv2
 import camera
-import pickle
-import network
+import sender
 
 
 DISPLAY = True
@@ -10,7 +10,7 @@ cam_data = {
         'index': 1,
         'host': '127.0.0.1',
         'port': 6666,
-        'resolution': (1920, 1080),
+        'resolution': (960, 720),
         'frame_rate': 60
     }
 }
@@ -20,7 +20,7 @@ class Client:
         self._camera_data = camera_data
 
         for name, data in self._camera_data.items():
-            self._camera_data[name]['network'] = network.Network(
+            self._camera_data[name]['network'] = sender.Sender(
                 host=data['host'],
                 port=data['port']
             )
@@ -30,26 +30,23 @@ class Client:
                 frame_rate=data['frame_rate']
             )
 
-    def connect(self) -> None:
-        for data in self._camera_data.values():
-            data['network'].connect()
-
-    def close(self) -> None:
-        for data in self._camera_data.values():
-            data['network'].close()
-
     def stream(self) -> None:
         while True:
             for name, data in self._camera_data.items():
                 _, image = data['camera'].read()
-                image_data = pickle.dumps(image)
-                data['network'].send_data(image_data)
+                data['network'].send_data(image)
 
                 if DISPLAY:
-                    data['camera'].show(name, image)
+                    self.display(name, image)
 
-    def image_to_bytes(image: object) -> bytes:
-        return pickle.dumps(image)
+    def display(self, title, image) -> None:
+        cv2.imshow(title, image)
+        cv2.waitKey(1)
+
+    def close(self) -> None:
+        for data in self._camera_data:
+            data['network'].close()
+            data['camera'].release()
 
 
 if __name__ == '__main__':
