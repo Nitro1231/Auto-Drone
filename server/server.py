@@ -1,6 +1,6 @@
 import cv2
-import camera
-import sender
+import receiver
+import numpy as np
 
 
 DISPLAY = True
@@ -9,32 +9,32 @@ cam_data = {
     'test_cam': {
         'index': 1,
         'host': '127.0.0.1',
-        'port': 6666,
+        'port': 443,
         'resolution': (640, 480),
         'frame_rate': 60
     }
 }
 
-class Client:
+class Server:
     def __init__(self, camera_data: dict) -> None:
         self._camera_data = camera_data
 
         for name, data in self._camera_data.items():
-            self._camera_data[name]['network'] = sender.Sender(
+            self._camera_data[name]['network'] = receiver.Receiver(
                 host=data['host'],
-                port=data['port']
+                port=data['port'],
+                data_size=data['resolution'][0] * data['resolution'][1] * 3
             )
-            self._camera_data[name]['camera'] = camera.Camera(
-                index=data['index'],
-                resolution=data['resolution'],
-                frame_rate=data['frame_rate']
-            )
+            print(f'Scoket for {name} has been initialized on port {data["port"]}.')
 
     def stream(self) -> None:
         while True:
             for name, data in self._camera_data.items():
-                _, image = data['camera'].read()
-                data['network'].send_data(image)
+                print('!')
+                image = np.frombuffer(
+                    buffer=data['network'].receive_data(),
+                    dtype=np.uint8
+                ).reshape(data['resolution'][1], data['resolution'][0], 3)
 
                 if DISPLAY:
                     self.display(name, image)
@@ -50,5 +50,5 @@ class Client:
 
 
 if __name__ == '__main__':
-    c = Client(cam_data)
+    c = Server(cam_data)
     c.stream()
