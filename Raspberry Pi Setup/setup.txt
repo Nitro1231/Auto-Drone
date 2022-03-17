@@ -1,0 +1,13 @@
+Connect Via LAN Cable -> raspberrypi.local
+
+Defult username: pi
+Defult password: raspberry
+
+Change the defualt password:
+passwd
+
+Enable SSH:
+Add SSH file to the SD Card
+
+Setup RBP as a wirless access point:
+https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/

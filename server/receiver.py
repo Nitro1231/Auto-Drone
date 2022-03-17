@@ -23,3 +23,6 @@ class Receiver:
                 new_data = True
 
         return b''.join(chunks)
+
+    def close(self) -> None:
+        self._socket.close()
