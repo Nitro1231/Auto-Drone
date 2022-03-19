@@ -1,13 +1,24 @@
+Enable SSH:
+Add SSH file to the SD Card
+
 Connect Via LAN Cable -> raspberrypi.local
 
 Defult username: pi
 Defult password: raspberry
 
-Change the defualt password:
-passwd
+sudo raspi-config
+ - Enable Camera
+ - Enable WI-FI
+ - Change Hostname and Password
+ - Reboot
 
-Enable SSH:
-Add SSH file to the SD Card
+sudo apt-get update
+sudo apt-get upgrade
+
+
+Setup RBP WI-FI driver:
+https://github.com/morrownr/8821au-20210708
 
 Setup RBP as a wirless access point:
+https://learn.sparkfun.com/tutorials/setting-up-a-raspberry-pi-3-as-an-access-point/all
 https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/
