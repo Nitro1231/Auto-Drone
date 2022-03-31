@@ -8,6 +8,7 @@ Defult password: raspberry
 
 sudo raspi-config
  - Enable Camera
+ - Enable I2C Bus
  - Enable WI-FI
  - Change Hostname and Password
  - Reboot
@@ -15,6 +16,11 @@ sudo raspi-config
 sudo apt-get update
 sudo apt-get upgrade
 
+Dual Cam Setup:
+sudo nano /boot/config.txt
+Add the following to the end line:
+dtparam=i2c_vc=on
+# sudo apt-get install libopencv-dev
 
 Setup RBP WI-FI driver:
 https://github.com/morrownr/8821au-20210708
