@@ -16,11 +16,18 @@ sudo raspi-config
 sudo apt-get update
 sudo apt-get upgrade
 
+sudo apt-get -y install python3-pip
+sudo apt-get install libgl1
+# sudo apt-get install libopencv-dev
+
+pip3 install opencv-python
+
+
 Dual Cam Setup:
 sudo nano /boot/config.txt
 Add the following to the end line:
 dtparam=i2c_vc=on
-# sudo apt-get install libopencv-dev
+
 
 Setup RBP WI-FI driver:
 https://github.com/morrownr/8821au-20210708
