@@ -32,14 +32,18 @@ while True:
         print('Can\'t receive frame (stream end?). Exiting ...')
         break
 
-    stereo = cv2.StereoBM_create(numDisparities=16, blockSize=15)
-    depth_map = abs(stereo.compute(gray_right, gray_left))
+    stereo = cv2.StereoBM_create(numDisparities=0, blockSize=33)
+    disparity = stereo.compute(gray_left, gray_right)
+
+    local_max = disparity.max()
+    local_min = disparity.min()
+    disparity_grayscale = (disparity-local_min)*(65535.0/(local_max-local_min))
+    disparity_fixtype = cv2.convertScaleAbs(disparity_grayscale, alpha=(255.0/65535.0))
+    disparity_color = cv2.applyColorMap(disparity_fixtype, cv2.COLORMAP_JET)
 
     cv2.imshow('Left', gray_left)
     cv2.imshow('Right', gray_right)
-    cv2.imshow('Depth map', depth_map)
-
-    print(depth_map[200])
+    cv2.imshow('Depth map', disparity_color)
 
     if cv2.waitKey(1) == ord('q'):
         break
